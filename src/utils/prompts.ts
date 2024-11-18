@@ -1,3 +1,4 @@
+// src/utils/prompts.ts
 export const codeReviewPrompt = (fileContent: string) => `
 Please review the following code and return a structured JSON response with the following fields:
 - "score": an overall score out of 100.
@@ -7,7 +8,7 @@ Please review the following code and return a structured JSON response with the 
   - "errorHandling": an object with "score" out of 25 and "reasoning" describing error handling.
   - "bestPractices": an object with "score" out of 25 and "reasoning" describing best practices.
 
-Return the result in this JSON format:
+Output ONLY the JSON in this format, with no additional comments, explanations, or content:
 
 {
   "score": 85,

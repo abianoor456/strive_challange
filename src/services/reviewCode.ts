@@ -1,17 +1,20 @@
 import { ReviewDto } from '@dto/ReviewRequest.dto';
 import { GitHubService } from './github';
-import { OpenAIService } from './openAI';
-import { ReviewResult, CodeReviewResponse } from '@types/index';
+import { LangChainService } from './langChain';
+import { ApiError } from '@utils/error';
 
 export class ReviewService {
-    async processReviewRequest(dto: ReviewDto): Promise<ReviewResult> {
-        const gitHubService = new GitHubService(dto.repoUrl, dto.fileSha);
-        const fileContent = await gitHubService.fetchFileContent();
-        const review: CodeReviewResponse = await OpenAIService.getCodeReview(fileContent);
+    async processReviewRequest(dto: ReviewDto) {
+        try {
 
-        return {
-            score: review.score,
-            reasoning: review.reasoning,
-        };
+            const gitHubService = new GitHubService(dto.repoUrl, dto.fileSha);
+            const fileContent = await gitHubService.fetchFileContent();
+            const review = await LangChainService.getCodeReview(fileContent);
+
+            return review;
+        } catch (error) {
+            console.error('Review processing error:', error);
+            throw new ApiError('Failed to process review request', 500);
+        }
     }
 }

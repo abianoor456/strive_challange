@@ -1,8 +1,9 @@
-// src/pages/api/review-file.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ReviewDto } from '@dto/ReviewRequest.dto';
 import { ReviewService } from '@services/reviewCode';
 import { ApiError } from '@utils/error';
+import { connectToDatabase } from '@/config/database';
+
 
 const reviewService = new ReviewService();
 
@@ -11,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: 'Only POST requests are allowed' });
     }
 
+    await connectToDatabase();
     try {
         const dto = new ReviewDto(req.body);
         const result = await reviewService.processReviewRequest(dto);
