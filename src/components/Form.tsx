@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-
-interface FormProps {
-  onSubmit: (repoUrl: string, fileSha: string) => void;
-  error: string;
-  loading: boolean;
-}
+import { FormProps } from '@types/index';
 
 const Form: React.FC<FormProps> = ({ onSubmit, error, loading }) => {
   const [repoUrl, setRepoUrl] = useState('');

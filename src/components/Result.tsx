@@ -1,8 +1,5 @@
 import React from 'react';
-
-interface ResultProps {
-  result: string;
-}
+import { ResultProps } from '@types/index';
 
 const Result: React.FC<ResultProps> = ({ result }) => (
   <div className="mt-8 p-4 border rounded-lg bg-gray-50 shadow-inner">
