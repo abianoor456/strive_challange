@@ -6,13 +6,24 @@ import { ApiError } from '@utils/error';
 import { CodeReviewResponse } from '@/types';
 
 export class ReviewService {
+    /**
+     * Processes a review request, handling errors gracefully and returning 
+     * detailed error information if encountered.
+     * 
+     * @param dto - Data Transfer Object containing the repository URL and file SHA.
+     * @returns The generated CodeReviewResponse.
+     * @throws {ApiError} If the request fails due to service errors.
+     */
     async processReviewRequest(dto: ReviewDto): Promise<CodeReviewResponse> {
         try {
-
+            // initialize GitHub service to fetch file content
             const gitHubService: GitHubService = new GitHubService(dto.repoUrl, dto.fileSha);
             const fileContent: string = await gitHubService.fetchFileContent();
+
+            // generate code review via LangChainService
             const review: CodeReviewResponse = await LangChainService.getCodeReview(fileContent);
 
+            // save the review in the database
             await DatabaseService.saveReview({
                 repoUrl: dto.repoUrl,
                 fileSha: dto.fileSha,
@@ -23,7 +34,15 @@ export class ReviewService {
             return review;
         } catch (error) {
             console.error('Review processing error:', error);
-            throw new ApiError('Failed to process review request', 500);
+
+            if (error instanceof ApiError) {
+                throw error;
+            }
+
+            throw new ApiError(
+                error.message || 'An unexpected error occurred while processing the review request',
+                500
+            );
         }
     }
 }
