@@ -14,7 +14,7 @@ interface ReviewDocument extends Document {
 
 const ReviewSchema = new Schema<ReviewDocument>({
     repoUrl: { type: String, required: true },
-    fileSha: { type: String, required: true, unique: true },
+    fileSha: { type: String, required: true },
     score: { type: Number, required: true },
     reasoning: {
         readability: { score: Number, reasoning: String },
@@ -24,4 +24,4 @@ const ReviewSchema = new Schema<ReviewDocument>({
     },
 }, { timestamps: true });
 
-export const Review = mongoose.model<ReviewDocument>('Review', ReviewSchema);
+export const Review = mongoose.models.Review || mongoose.model<ReviewDocument>('Review', ReviewSchema);
