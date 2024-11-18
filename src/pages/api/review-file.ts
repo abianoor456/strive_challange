@@ -5,6 +5,15 @@ import { ApiError } from '@utils/error';
 
 const reviewService = new ReviewService();
 
+/**
+ * Handles an API request to review a file.
+ *
+ * @param req The request object
+ * @param res The response object
+ *
+ * @returns A JSON response containing the review result
+ */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Only POST requests are allowed' });

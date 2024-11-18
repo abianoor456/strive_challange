@@ -18,6 +18,13 @@ export class GitHubService {
         this.fileSha = fileSha;
     }
 
+    /**
+     * Fetches the content of a file from a GitHub repository based on the `repoUrl` and `fileSha` set in the constructor.
+     *
+     * @returns The content of the file as a string.
+     * @throws {ApiError} If the GitHub API returns an error or if the `repoUrl` is invalid.
+     * @throws {InternalServer} If there is an unexpected error fetching the file from GitHub.
+     */
     async fetchFileContent(): Promise<string> {
         const repoDetails = getOwnerAndRepo(this.repoUrl);
         if (!repoDetails) {

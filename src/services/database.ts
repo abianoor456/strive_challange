@@ -1,6 +1,6 @@
+import { ReviewDocument } from '@/types';
 import { connectToDatabase } from '../config/database';
 import { Review } from '@dal/models/Review';
-import { ReviewDocument } from '@types/index';
 import { guard } from '@utils/error';
 
 class DatabaseService {

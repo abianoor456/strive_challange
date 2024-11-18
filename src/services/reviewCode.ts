@@ -3,14 +3,15 @@ import DatabaseService from './database';
 import { GitHubService } from './github';
 import { LangChainService } from './langChain';
 import { ApiError } from '@utils/error';
+import { CodeReviewResponse } from '@/types';
 
 export class ReviewService {
-    async processReviewRequest(dto: ReviewDto) {
+    async processReviewRequest(dto: ReviewDto): Promise<CodeReviewResponse> {
         try {
 
-            const gitHubService = new GitHubService(dto.repoUrl, dto.fileSha);
-            const fileContent = await gitHubService.fetchFileContent();
-            const review = await LangChainService.getCodeReview(fileContent);
+            const gitHubService: GitHubService = new GitHubService(dto.repoUrl, dto.fileSha);
+            const fileContent: string = await gitHubService.fetchFileContent();
+            const review: CodeReviewResponse = await LangChainService.getCodeReview(fileContent);
 
             await DatabaseService.saveReview({
                 repoUrl: dto.repoUrl,

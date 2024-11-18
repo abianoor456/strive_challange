@@ -1,5 +1,5 @@
+import { FormProps } from '@/types';
 import React, { useState } from 'react';
-import { FormProps } from '@types/index';
 
 const Form: React.FC<FormProps> = ({ onSubmit, error, loading }) => {
   const [repoUrl, setRepoUrl] = useState('');

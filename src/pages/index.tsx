@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Form from '@components/Form';
 import Result from '@components/Result';
-import { ReviewResult } from '@types/index';
+import { ReviewResult } from '@/types';
+
 
 const Home: React.FC = () => {
   const [result, setResult] = useState<ReviewResult | null>(null);

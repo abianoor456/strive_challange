@@ -1,5 +1,5 @@
+import { ResultProps } from '@/types';
 import React from 'react';
-import { ResultProps } from '@types/index';
 
 const Result: React.FC<ResultProps> = ({ result }) => {
   if (!result) return null;

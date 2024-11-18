@@ -1,5 +1,5 @@
+import { ReviewRequestBody } from '@/types';
 import { isValid, getOwnerAndRepo } from '@utils/github'
-import { ReviewRequestBody } from '@types/index';
 export class ReviewDto {
   repoUrl: string;
   fileSha: string;
