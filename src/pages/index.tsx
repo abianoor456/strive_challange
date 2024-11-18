@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Form from '../components/Form';
-import Result from '../components/Result';
+import Form from '@components/Form';
+import Result from '@components/Result';
 import { ReviewResult } from '@types/index';
 
 const Home: React.FC = () => {
@@ -11,15 +11,13 @@ const Home: React.FC = () => {
 
   const handleFormSubmit = async (repoUrl: string, fileSha: string) => {
     setLoading(true);
-    setError(''); // Reset error on new submit
-    setResult(null); // Reset result on new submit
+    setError(''); 
+    setResult(null); 
     try {
       const response = await axios.post('/api/review-file', { repoUrl, fileSha });
       const { score, reasoning } = response.data;
       setResult({ score, reasoning });
     } catch (err: any) {
-      console.error('Error calling API:', err);
-      // Display error message directly if it exists
       setError(err.response?.data?.message || err.message || 'An unexpected error occurred.');
     } finally {
       setLoading(false);
