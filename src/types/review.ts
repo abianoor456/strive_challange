@@ -24,3 +24,15 @@ export interface CodeReviewResponse {
     score: number;
     reasoning: ReviewReasoning;
 }
+
+export interface ReviewDocument {
+    repoUrl: string;
+    fileSha: string;
+    score: number;
+    reasoning: {
+        readability: { score: number; reasoning: string };
+        functionality: { score: number; reasoning: string };
+        errorHandling: { score: number; reasoning: string };
+        bestPractices: { score: number; reasoning: string };
+    };
+}

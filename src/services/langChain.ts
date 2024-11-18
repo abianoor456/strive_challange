@@ -1,4 +1,3 @@
-// src/services/LangChainService.ts
 import { ChatOpenAI } from "@langchain/openai";
 import { CodeReviewResponse } from '@types/index';
 import { guard } from '@utils/error';
