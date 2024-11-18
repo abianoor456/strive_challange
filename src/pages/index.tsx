@@ -11,16 +11,16 @@ const Home: React.FC = () => {
 
   const handleFormSubmit = async (repoUrl: string, fileSha: string) => {
     setLoading(true);
+    setError(''); // Reset error on new submit
+    setResult(null); // Reset result on new submit
     try {
-
       const response = await axios.post('/api/review-file', { repoUrl, fileSha });
       const { score, reasoning } = response.data;
       setResult({ score, reasoning });
-      setError('');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error calling API:', err);
-      setResult(null);
-      setError('Error fetching file or analyzing code. Please check the URL and SHA.');
+      // Display error message directly if it exists
+      setError(err.response?.data?.message || err.message || 'An unexpected error occurred.');
     } finally {
       setLoading(false);
     }

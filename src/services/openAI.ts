@@ -2,6 +2,7 @@
 import OpenAI from 'openai';
 import { CodeReviewResponse } from '@types/index';
 import { codeReviewPrompt } from '@utils/prompts';
+import { guard } from '@utils/error';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY!,
@@ -30,7 +31,8 @@ export class OpenAIService {
             return parsedContent;
         } catch (error) {
             console.error('Error with OpenAI API:', error);
-            throw new Error('Failed to process the code review');
+            guard.internalServer('Failed to process the code review');
+            return { score: 0, reasoning: {} as CodeReviewResponse['reasoning'] };
         }
     }
 }

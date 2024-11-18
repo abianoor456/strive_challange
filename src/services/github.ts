@@ -1,6 +1,7 @@
 // src/services/GitHubService.ts
 import axios from 'axios';
 import { isValidRepoUrl, isValidFileSha, getOwnerAndRepo } from '@utils/github'
+import { guard } from '@utils/error';
 
 export class GitHubService {
     private repoUrl: string;
@@ -8,10 +9,10 @@ export class GitHubService {
 
     constructor(repoUrl: string, fileSha: string) {
         if (!isValidRepoUrl(repoUrl)) {
-            throw new Error('Invalid GitHub URL.');
+            guard.badImplementation('Invalid GitHub URL.', 400);
         }
         if (!isValidFileSha(fileSha)) {
-            throw new Error('Invalid file SHA format.');
+            guard.badImplementation('Invalid file SHA format.', 400);
         }
         this.repoUrl = repoUrl;
         this.fileSha = fileSha;
@@ -19,9 +20,11 @@ export class GitHubService {
 
     async fetchFileContent(): Promise<string> {
         const repoDetails = getOwnerAndRepo(this.repoUrl);
-        if (!repoDetails) throw new Error('Invalid GitHub repository URL.');
+        if (!repoDetails) {
+            guard.notFound('Invalid GitHub repository URL.');
+        }
 
-        const { owner, repo } = repoDetails;
+        const { owner, repo } = repoDetails!;
         const githubApiUrl = `https://api.github.com/repos/${owner}/${repo}/git/blobs/${this.fileSha}`;
 
         try {
@@ -31,7 +34,8 @@ export class GitHubService {
             return Buffer.from(response.data.content, 'base64').toString('utf-8');
         } catch (error) {
             console.error('Error fetching file from GitHub:', error);
-            throw new Error('Failed to fetch file from GitHub');
+            guard.internalServer('Failed to fetch file from GitHub');
+            return ''
         }
     }
 }
