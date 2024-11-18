@@ -1,24 +1,25 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import Form from '../components/Form';
 import Result from '../components/Result';
+import { ReviewResult } from '@types/index';
 
 const Home: React.FC = () => {
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState<ReviewResult | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); 
 
   const handleFormSubmit = async (repoUrl: string, fileSha: string) => {
     setLoading(true);
     try {
+
       const response = await axios.post('/api/review-file', { repoUrl, fileSha });
       const { score, reasoning } = response.data;
-      setResult(`Score: ${score}\nReasoning: ${reasoning}`);
+      setResult({ score, reasoning });
       setError('');
     } catch (err) {
       console.error('Error calling API:', err);
-      setResult('');
+      setResult(null);
       setError('Error fetching file or analyzing code. Please check the URL and SHA.');
     } finally {
       setLoading(false);

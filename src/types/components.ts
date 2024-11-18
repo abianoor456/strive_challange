@@ -1,3 +1,4 @@
+import { ReviewResult } from "./review";
 export interface ErrorProps {
     message: string;
 }
@@ -9,5 +10,5 @@ export interface FormProps {
 }
 
 export interface ResultProps {
-    result: string;
+    result: ReviewResult
 }

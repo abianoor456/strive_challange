@@ -1,12 +1,14 @@
 // src/services/OpenAIService.ts
 import OpenAI from 'openai';
+import { CodeReviewResponse } from '@types/index';
+import { codeReviewPrompt } from '@utils/prompts';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY!,
 });
 
 export class OpenAIService {
-    static async getCodeReview(fileContent: string): Promise<string> {
+    static async getCodeReview(fileContent: string): Promise<CodeReviewResponse> {
         try {
             const response = await openai.chat.completions.create({
                 model: 'gpt-4o-mini',
@@ -14,13 +16,7 @@ export class OpenAIService {
                     { role: 'system', content: 'You are a code review assistant.' },
                     {
                         role: 'user',
-                        content: `Please review the following code and provide a score out of 100. Evaluate it based on:
-            - Readability
-            - Functionality
-            - Error Handling
-            - Best Practices
-
-            Here is the code:\n\n${fileContent}`,
+                        content: codeReviewPrompt(fileContent),
                     },
                 ],
             });
@@ -30,7 +26,8 @@ export class OpenAIService {
                 throw new Error('Received null content from OpenAI response');
             }
 
-            return content;
+            const parsedContent: CodeReviewResponse = JSON.parse(content);
+            return parsedContent;
         } catch (error) {
             console.error('Error with OpenAI API:', error);
             throw new Error('Failed to process the code review');

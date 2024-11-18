@@ -6,10 +6,12 @@ export class GitHubService {
     private repoUrl: string;
     private fileSha: string;
 
-    //TODO: add proper error handling
     constructor(repoUrl: string, fileSha: string) {
-        if (!isValidRepoUrl(repoUrl) || !isValidFileSha(fileSha)) {
-            throw new Error('Invalid GitHub URL or SHA format.');
+        if (!isValidRepoUrl(repoUrl)) {
+            throw new Error('Invalid GitHub URL.');
+        }
+        if (!isValidFileSha(fileSha)) {
+            throw new Error('Invalid file SHA format.');
         }
         this.repoUrl = repoUrl;
         this.fileSha = fileSha;
