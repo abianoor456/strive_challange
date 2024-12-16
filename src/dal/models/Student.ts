@@ -5,18 +5,19 @@ export interface Student extends Document {
     userId: mongoose.Types.ObjectId;
     bio: string;
     skills: string[];
-    portfolioLinks: string[];
-    education: {
+    portfolioLinks?: string[]; // Optional portfolio links
+    education?: {
         degree: string;
         institution: string;
         yearOfGraduation: number;
-    }[];
-    experience: {
+    }[]; // Optional education
+    experience?: {
         title: string;
         company: string;
         duration: string;
         description: string;
-    }[];
+    }[]; // Optional experience
+    cvUrl?: string; // Optional CV URL
 }
 
 // Schema definition
@@ -25,22 +26,23 @@ const StudentSchema = new Schema<Student>(
         userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
         bio: { type: String },
         skills: { type: [String], default: [] },
-        portfolioLinks: { type: [String], default: [] },
+        portfolioLinks: { type: [String], default: [] }, // Optional with default value
         education: [
             {
-                degree: { type: String, required: true },
-                institution: { type: String, required: true },
-                yearOfGraduation: { type: Number, required: true },
+                degree: { type: String },
+                institution: { type: String },
+                yearOfGraduation: { type: Number },
             },
-        ],
+        ], // Optional by removing "required" keys
         experience: [
             {
-                title: { type: String, required: true },
-                company: { type: String, required: true },
-                duration: { type: String, required: true },
+                title: { type: String },
+                company: { type: String },
+                duration: { type: String },
                 description: { type: String },
             },
-        ],
+        ], // Optional by removing "required" keys
+        cvUrl: { type: String, default: null }, // Optional with default value
     },
     { timestamps: true }
 );
